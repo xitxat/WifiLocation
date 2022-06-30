@@ -7,3 +7,4 @@ examples/googleLocation/Release/
 .pio/
 .vscode/
 examples/**/wificonfig.h
+src/wificonfig.h

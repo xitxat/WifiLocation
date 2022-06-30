@@ -1,28 +1,14 @@
 
 #include <Arduino.h>
-#if defined ARDUINO_ARCH_ESP8266
 #include <ESP8266WiFi.h>
-#elif defined ARDUINO_ARCH_ESP32
-#include <WiFi.h>
-#else
-#error Wrong platform
-#endif 
-
-#include <bingMapsGeocoding.h>
-
-#if __has_include("wificonfig.h")
+#include <WifiLocation.h>
 #include "wificonfig.h"
-#else
-const char* ssid = "SSID";
-const char* passwd = "PASSWD";
-const char* bingMapsKey = "YOUR_BING_MAPS_KEY";
-#endif
+#include <Sensors.h>
+#include <Wire.h> //  I2C
 
-// Microsoft headquarters in Redmond, WA
-float lat = 47.641595;
-float lon = -122.134087;
+WifiLocation location (googleApiKey);
 
-BingGeoCoding bingGeoCoding (bingMapsKey);
+
 
 // Set time via NTP, as required for x.509 validation
 void setClock () {
@@ -44,6 +30,17 @@ void setClock () {
 
 void setup () {
     Serial.begin (115200);
+    pinMode(LED_BUILTIN, OUTPUT);
+    publishBlink();         // Blue led setup signal
+
+    Wire.begin(D2, D1);     // join i2c bus with SDA=D2 and SCL=D1 of NodeMCU
+
+    Serial.println("~~~~~~  I2C Scanner setup");
+    dotDash();
+    scanI2cBus();
+
+  initBMP180();
+
     // Connect to WPA/WPA2 network
     WiFi.mode (WIFI_STA);
     WiFi.begin (ssid, passwd);
@@ -58,12 +55,19 @@ void setup () {
     Serial.println ("Connected");
     setClock ();
 
-    bingGeoData_t geoData = bingGeoCoding.getGeoFromPosition (lat, lon);
+    // Google Loc
+    location_t loc = location.getGeoFromWiFi();
 
-    Serial.printf ("Address: %s\n", bingGeoCoding.getCompleteAddress (&geoData).c_str());
-
+    Serial.println("Location request data");
+    Serial.println(location.getSurroundingWiFiJson()+"\n");
+    Serial.println ("Location: " + String (loc.lat, 7) + "," + String (loc.lon, 7));
+    //Serial.println("Longitude: " + String(loc.lon, 7));
+    Serial.println ("Accuracy: " + String (loc.accuracy));
+    Serial.println ("Result: " + location.wlStatusStr (location.getStatus ()));
 }
 
 void loop () {
-
+    loopBlink();
+  runBMP180();
+delay(1000);
 }
