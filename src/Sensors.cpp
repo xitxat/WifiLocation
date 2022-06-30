@@ -45,14 +45,14 @@ int numberOfDevices; // Number of Dallas temperature devices found
 float coreTemp;
 
 /*  CREATE  */
-Adafruit_AHTX0 aht;
+        //Adafruit_AHTX0 aht;
 Adafruit_BMP085 bmp;
 
 OneWire oneWire(ONE_WIRE_BUS);
-DallasTemperature sensors(&oneWire); // Pass our oneWire reference to Dallas Temperature sensor
-DeviceAddress tempDeviceAddress;     // We'll use this variable to store a found device address
-DeviceAddress wildHiveCoreProbe = {0x28, 0x00, 0x3D, 0x1C, 0x26, 0x4C, 0x0E, 0xD0};  //  Extended fcns avail. ref:WildHive project
-                                                                                //  Blue wrap. Not waterproof.
+        // DallasTemperature sensors(&oneWire); // Pass our oneWire reference to Dallas Temperature sensor
+        // DeviceAddress tempDeviceAddress;     // We'll use this variable to store a found device address
+        // DeviceAddress wildHiveCoreProbe = {0x28, 0x00, 0x3D, 0x1C, 0x26, 0x4C, 0x0E, 0xD0};  //  Extended fcns avail. ref:WildHive project
+        //                                                                                 //  Blue wrap. Not waterproof.
 /*  FUNCTIONS */
 void loopBlink()
 {
@@ -189,38 +189,38 @@ void runLDR()
     delay(DELAY_LDR);
 }
 
-void initAHT()
-{
-    Serial.println();
-    Serial.println("init AHT");
+        // void initAHT()
+        // {
+        //     Serial.println();
+        //     Serial.println("init AHT");
 
-    if (!aht.begin())
-    {
-        Serial.println("Could not find AHT. Check wiring");
-        while (1)
-            delay(10);
-    }
-    Serial.println("AHT10 or AHT20 found");
-}
+        //     if (!aht.begin())
+        //     {
+        //         Serial.println("Could not find AHT. Check wiring");
+        //         while (1)
+        //             delay(10);
+        //     }
+        //     Serial.println("AHT10 or AHT20 found");
+        // }
 
-void runAHT()
-{
-    sensors_event_t humidity, temp;
-    aht.getEvent(&humidity, &temp); // populate temp and humidity objects with fresh data
+        // void runAHT()
+        // {
+        //     sensors_event_t humidity, temp;
+        //     aht.getEvent(&humidity, &temp); // populate temp and humidity objects with fresh data
 
-    ahtTemp = temp.temperature;
-    ahtHumid = humidity.relative_humidity;
+        //     ahtTemp = temp.temperature;
+        //     ahtHumid = humidity.relative_humidity;
 
-    Serial.println();
-    Serial.println("~~~~~~ AHT temp & humidity");
-    Serial.print("AHT Outside Temperature: ");
-    Serial.print(temp.temperature);
-    Serial.println(" degrees C");
-    Serial.print("AHT Humidity: ");
-    Serial.print(humidity.relative_humidity);
-    Serial.println("% rH");
-    Serial.println();
-}
+        //     Serial.println();
+        //     Serial.println("~~~~~~ AHT temp & humidity");
+        //     Serial.print("AHT Outside Temperature: ");
+        //     Serial.print(temp.temperature);
+        //     Serial.println(" degrees C");
+        //     Serial.print("AHT Humidity: ");
+        //     Serial.print(humidity.relative_humidity);
+        //     Serial.println("% rH");
+        //     Serial.println();
+        // }
 
 void scanI2cBus()
 {
@@ -317,107 +317,107 @@ void runBMP180()
     // Serial.println(" ");
 }
 
-void initDallas()
-{
-    Serial.println("~~~~~~  DALLAS setup");
-    Serial.println(" ");
-    sensors.begin(); // Start the DS18B20 sensor
+        // void initDallas()
+        // {
+        //     Serial.println("~~~~~~  DALLAS setup");
+        //     Serial.println(" ");
+        //     sensors.begin(); // Start the DS18B20 sensor
 
-    Serial.println("~~~~~~  OneWire Scan");
-    oneWireScanner();
+        //     Serial.println("~~~~~~  OneWire Scan");
+        //     oneWireScanner();
 
-    Serial.println(" ");
-}
+        //     Serial.println(" ");
+        // }
 
-void printAddress(DeviceAddress deviceAddress) // function to print a device address
-{
-  for (uint8_t i = 0; i < 8; i++)
-  {
-    Serial.print("0x");
-    // zero pad the address if necessary
+        // void printAddress(DeviceAddress deviceAddress) // function to print a device address
+        // {
+        // for (uint8_t i = 0; i < 8; i++)
+        // {
+        //     Serial.print("0x");
+        //     // zero pad the address if necessary
 
-    if (deviceAddress[i] < 16)
-      Serial.print("0"); // <16
-    Serial.print(deviceAddress[i], HEX);
+        //     if (deviceAddress[i] < 16)
+        //     Serial.print("0"); // <16
+        //     Serial.print(deviceAddress[i], HEX);
 
-    if (i < 7)
-    {
-      Serial.print(", ");
-    }
-  }
-}
+        //     if (i < 7)
+        //     {
+        //     Serial.print(", ");
+        //     }
+        // }
+        // }
 
-void runDallasByIndex()
-{
-    sensors.requestTemperatures();
-    float temperatureC = sensors.getTempCByIndex(0);
-    Serial.println("DALLAS Hive Core Temperature:");
+        // void runDallasByIndex()
+        // {
+        //     sensors.requestTemperatures();
+        //     float temperatureC = sensors.getTempCByIndex(0);
+        //     Serial.println("DALLAS Hive Core Temperature:");
 
-    Serial.print(temperatureC);
-    Serial.print("ºC");
-        Serial.println("    (Device index 0)");
-    Serial.println(" ");
+        //     Serial.print(temperatureC);
+        //     Serial.print("ºC");
+        //         Serial.println("    (Device index 0)");
+        //     Serial.println(" ");
 
-    delay(1000);
-}
+        //     delay(1000);
+        // }
 
-void oneWireScanner()
-{
-    // locate devices on the bus
-    Serial.print("Locating devices...");
-    Serial.print("Found ");
-    Serial.print(sensors.getDeviceCount(), DEC);
-    Serial.println(" devices.");
-    Serial.println(" ");
-delay(500);
+        // void oneWireScanner()
+        // {
+        //     // locate devices on the bus
+        //     Serial.print("Locating devices...");
+        //     Serial.print("Found ");
+        //     Serial.print(sensors.getDeviceCount(), DEC);
+        //     Serial.println(" devices.");
+        //     Serial.println(" ");
+        // delay(500);
 
-    // Grab a count of devices on the wire
-    numberOfDevices = sensors.getDeviceCount();
-    if (numberOfDevices >= 1)
-    {
-          // Loop through each device, print out address
-        for(int i=0;i<numberOfDevices; i++)
-        {
-            // Search the wire for address
-            if(sensors.getAddress(tempDeviceAddress, i))
-            {
-            Serial.print("Found device ");
-            Serial.print(i, DEC);
-            Serial.print(" with address: ");
-            printAddress(tempDeviceAddress);
-            Serial.println();
-delay(500);
-            Serial.print("   Setting resolution: ");
-            Serial.println(TEMPERATURE_PRECISION, DEC);
+        //     // Grab a count of devices on the wire
+        //     numberOfDevices = sensors.getDeviceCount();
+        //     if (numberOfDevices >= 1)
+        //     {
+        //         // Loop through each device, print out address
+        //         for(int i=0;i<numberOfDevices; i++)
+        //         {
+        //             // Search the wire for address
+        //             if(sensors.getAddress(tempDeviceAddress, i))
+        //             {
+        //             Serial.print("Found device ");
+        //             Serial.print(i, DEC);
+        //             Serial.print(" with address: ");
+        //             printAddress(tempDeviceAddress);
+        //             Serial.println();
+        // delay(500);
+        //             Serial.print("   Setting resolution: ");
+        //             Serial.println(TEMPERATURE_PRECISION, DEC);
 
-            // set the resolution to TEMPERATURE_PRECISION bit (Each Dallas/Maxim device is capable of several different resolutions)
-            sensors.setResolution(tempDeviceAddress, TEMPERATURE_PRECISION);
+        //             // set the resolution to TEMPERATURE_PRECISION bit (Each Dallas/Maxim device is capable of several different resolutions)
+        //             sensors.setResolution(tempDeviceAddress, TEMPERATURE_PRECISION);
 
-            Serial.print("Confirming resolution: ");
-            Serial.print(sensors.getResolution(tempDeviceAddress), DEC);
-            Serial.println();
-            delay(500);
-            }
-            else{
-            Serial.print("Found ghost device at ");
-            Serial.print(i, DEC);
-            Serial.print(" but could not detect address. Check power and cabling");
-            Serial.println();
-            }
-        }
-    }
-    delay(200);
-}
+        //             Serial.print("Confirming resolution: ");
+        //             Serial.print(sensors.getResolution(tempDeviceAddress), DEC);
+        //             Serial.println();
+        //             delay(500);
+        //             }
+        //             else{
+        //             Serial.print("Found ghost device at ");
+        //             Serial.print(i, DEC);
+        //             Serial.print(" but could not detect address. Check power and cabling");
+        //             Serial.println();
+        //             }
+        //         }
+        //     }
+        //     delay(200);
+        // }
 
 
-void printDualProbes()                            //  Print soil and water temps
-{
-  coreTemp = sensors.getTempC(wildHiveCoreProbe);
-  Serial.print("Wild Hive Core Temp: ");
-  Serial.println(coreTemp);
-//   soilTemp = sensors.getTempC(soilProbe);
-//   Serial.print("Soil temp is: ");
-//   Serial.println(soilTemp);
+        // void printDualProbes()                            //  Print soil and water temps
+        // {
+        // coreTemp = sensors.getTempC(wildHiveCoreProbe);
+        // Serial.print("Wild Hive Core Temp: ");
+        // Serial.println(coreTemp);
+        // //   soilTemp = sensors.getTempC(soilProbe);
+        // //   Serial.print("Soil temp is: ");
+        // //   Serial.println(soilTemp);
 
-  Serial.println();
-}
+        // Serial.println();
+        // }
