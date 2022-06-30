@@ -6,8 +6,9 @@
 #include <Sensors.h>
 #include <Wire.h> //  I2C
 
+float lat{0.0};
+float lon{0.0};
 WifiLocation location (googleApiKey);
-
 
 
 // Set time via NTP, as required for x.509 validation
@@ -64,10 +65,21 @@ void setup () {
     //Serial.println("Longitude: " + String(loc.lon, 7));
     Serial.println ("Accuracy: " + String (loc.accuracy));
     Serial.println ("Result: " + location.wlStatusStr (location.getStatus ()));
+
+    lat = loc.lat;
+    lon = loc.lon;
 }
 
 void loop () {
     loopBlink();
   runBMP180();
+
+    Serial.println (" " );
+    Serial.println ("~~~~   Location:" );
+    Serial.print ("Longitude: " );
+    Serial.println (lon );
+    Serial.print ("Latitude:  " );
+    Serial.println (lat );
+    Serial.println (" " );
 delay(1000);
 }
