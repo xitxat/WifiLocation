@@ -6,8 +6,8 @@
 #include <Sensors.h>
 #include <Wire.h> //  I2C
 
-float lat{0.0};
-float lon{0.0};
+float latitude{0.0};
+float longitude{0.0};
 WifiLocation location (googleApiKey);
 
 
@@ -66,8 +66,8 @@ void setup () {
     Serial.println ("Accuracy: " + String (loc.accuracy));
     Serial.println ("Result: " + location.wlStatusStr (location.getStatus ()));
 
-    lat = loc.lat;
-    lon = loc.lon;
+    latitude = loc.lat;
+    longitude = loc.lon;
 }
 
 void loop () {
@@ -76,10 +76,10 @@ void loop () {
 
     Serial.println (" " );
     Serial.println ("~~~~   Location:" );
-    Serial.print ("Longitude: " );
-    Serial.println (lon );
+    Serial.print ("longitudegitude: " );
+    Serial.println (longitude );
     Serial.print ("Latitude:  " );
-    Serial.println (lat );
+    Serial.println (latitude );
     Serial.println (" " );
 delay(1000);
 }
