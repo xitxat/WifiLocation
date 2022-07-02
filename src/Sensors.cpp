@@ -11,7 +11,6 @@
     I2C:    SDA=D2 and SCL=D1
 */
 
-unsigned long loopCounter = 10;
 /*  DUST SENSOR */
 unsigned long dustDuration;
 unsigned long dustStartTime;             // millis timeer
@@ -54,21 +53,7 @@ OneWire oneWire(ONE_WIRE_BUS);
         // DeviceAddress wildHiveCoreProbe = {0x28, 0x00, 0x3D, 0x1C, 0x26, 0x4C, 0x0E, 0xD0};  //  Extended fcns avail. ref:WildHive project
         //                                                                                 //  Blue wrap. Not waterproof.
 /*  FUNCTIONS */
-void loopBlink()
-{
-    loopCounter--;
-    if (loopCounter == 0)
-    {
-        loopCounter = 10;
-    }
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(200);
-    Serial.print("LOOP ");
-    Serial.println(loopCounter);
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(200);
-    Serial.println(" ");
-}
+
 
 void publishBlink()
 {
@@ -222,47 +207,6 @@ void runLDR()
         //     Serial.println();
         // }
 
-void scanI2cBus()
-{
-    byte error, address;
-    int nDevices;
-    Serial.println(" ");
-    Serial.println("~~~~~~ I2C Scanning...");
-    nDevices = 0;
-    for (address = 1; address < 127; address++)
-    {
-        Wire.beginTransmission(address);
-        error = Wire.endTransmission();
-        if (error == 0)
-        {
-            Serial.print("I2C device found at address 0x");
-            if (address < 16)
-            {
-                Serial.print("0");
-            }
-            Serial.println(address, HEX);
-            nDevices++;
-        }
-        else if (error == 4)
-        {
-            Serial.print("Unknow error at address 0x");
-            if (address < 16)
-            {
-                Serial.print("0");
-            }
-            Serial.println(address, HEX);
-        }
-    }
-    if (nDevices == 0)
-    {
-        Serial.println("No I2C devices found\n");
-    }
-    else
-    {
-        Serial.println("done\n");
-    }
-    delay(200);
-}
 
 void initBMP180()
 {

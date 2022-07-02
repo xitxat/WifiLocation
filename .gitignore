@@ -8,3 +8,4 @@ examples/googleLocation/Release/
 .vscode/
 examples/**/wificonfig.h
 src/wificonfig.h
+src/GeoKeys.h

@@ -30,7 +30,6 @@ extern float coreTemp;
 
 
 /*     FCN protos   */
-void scanI2cBus();
 
 void initDust();
 void runDust(); //  Dust Sensor
