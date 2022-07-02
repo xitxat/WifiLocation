@@ -2,15 +2,12 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WifiLocation.h>
-#include "GeoKeys.h"
 #include <millisDelay.h>
+#include <PinFlasher.h>
 #include "Functions.h"
 #include <Sensors.h>
 #include <Wire.h> //  I2C
 
-float latitude{0.0};
-float longitude{0.0};
-WifiLocation location (googleApiKey);
 
 
 
@@ -30,18 +27,9 @@ void setup () {
 
     setClock ();
 
-    // Google Loc
-    location_t loc = location.getGeoFromWiFi();
+initGoogleLoc();
 
-    Serial.println("Location request data");
-    Serial.println(location.getSurroundingWiFiJson()+"\n");
-    Serial.println ("Location: " + String (loc.lat, 7) + "," + String (loc.lon, 7));
-    //Serial.println("Longitude: " + String(loc.lon, 7));
-    Serial.println ("Accuracy: " + String (loc.accuracy));
-    Serial.println ("Result: " + location.wlStatusStr (location.getStatus ()));
 
-    latitude = loc.lat;
-    longitude = loc.lon;
 }
 
 void loop () {
@@ -49,13 +37,9 @@ void loop () {
     //blinkWiFi();                // Blue led setup signal
 
   runBMP180();
+  printGPS();
 
-    Serial.println (" " );
-    Serial.println ("~~~~   Location:" );
-    Serial.print ("longitudegitude: " );
-    Serial.println (longitude );
-    Serial.print ("Latitude:  " );
-    Serial.println (latitude );
-    Serial.println (" " );
+
+
 //delay(10000);
 }

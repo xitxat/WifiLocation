@@ -6,6 +6,8 @@
 /*     FCN protos   */
 
 void setClock ();
+void initGoogleLoc();
+void printGPS();
 void initWiFi();
 void scanI2cBus();
 

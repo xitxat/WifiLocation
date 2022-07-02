@@ -1,16 +1,26 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WifiLocation.h>
+#include "GeoKeys.h"
 #include "wificonfig.h"
 #include <millisDelay.h>
+#include <PinFlasher.h>
 #include <Wire.h> //  I2C
+
+WifiLocation location (googleApiKey);
+PinFlasher ledFlasher(LED_BUILTIN);
+
+float latitude{0.0};
+float longitude{0.0};
 
 unsigned long loopCounter = 10;
 
 
         /*  GEO LOCATION     */
 
-void setClock () {          // Set time via NTP, as required for x.509 validation
+void setClock () {                  // Set time via NTP, as required for x.509 validation
+        ledFlasher.setOnOff(200);   // Scanning blink
+
     configTime (0, 0, "pool.ntp.org", "time.nist.gov");
 
     Serial.print ("Waiting for NTP time sync: ");
@@ -25,15 +35,43 @@ void setClock () {          // Set time via NTP, as required for x.509 validatio
     Serial.print ("\n");
     Serial.print ("Current time: ");
     Serial.print (asctime (&timeinfo));
+
+    ledFlasher.setOnOff(HIGH);      // LED_BUILTIN HIGH = off
 }
 
+void initGoogleLoc(){           // Google GPS Location 
+    location_t loc = location.getGeoFromWiFi();
+    ledFlasher.setOnOff(200);   // Scanning blink
+    Serial.println("Location request data");
+    Serial.println(location.getSurroundingWiFiJson()+"\n");
+    Serial.println ("Location: " + String (loc.lat, 7) + "," + String (loc.lon, 7));
+    //Serial.println("Longitude: " + String(loc.lon, 7));
+    Serial.println ("Accuracy: " + String (loc.accuracy));
+    Serial.println ("Result: " + location.wlStatusStr (location.getStatus ()));
+    ledFlasher.setOnOff(HIGH);      // LED_BUILTIN HIGH = off
+
+    latitude = loc.lat;
+    longitude = loc.lon;
+    }
+
+void printGPS(){   
+    Serial.println (" " );
+    Serial.println ("~~~~   Location:" );
+    Serial.print ("longitudegitude: " );
+    Serial.println (longitude );
+    Serial.print ("Latitude:  " );
+    Serial.println (latitude );
+    Serial.println (" " );
+    }
+    
         /*  WiFi            */
 
-void initWiFi(){    // Connect to WPA/WPA2 network
+void initWiFi(){                        // Connect to WPA/WPA2 network
 
     WiFi.mode (WIFI_STA);
     WiFi.begin (ssid, passwd);
     while (WiFi.status () != WL_CONNECTED) {
+        ledFlasher.setOnOff(50);        // Scanning blink
         Serial.print ("Attempting to connect to WPA SSID: ");
         Serial.println (ssid);
         // wait 5 seconds for connection:
@@ -41,7 +79,8 @@ void initWiFi(){    // Connect to WPA/WPA2 network
         Serial.println (WiFi.status ());
         delay (500);
     }
-    Serial.println ("Connected");
+    ledFlasher.setOnOff(HIGH);      // LED_BUILTIN HIGH = off
+    Serial.println ("WiFiConnected");
 
 
 }
@@ -89,7 +128,6 @@ void scanI2cBus()
     }
     delay(200);
 }
-
 
 
         /*  BLINKS           */  // *   *   *   *   *
