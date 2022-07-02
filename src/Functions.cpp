@@ -7,6 +7,7 @@
 #include <PinFlasher.h>
 #include <Wire.h> //  I2C
 
+
 WifiLocation location (googleApiKey);
 PinFlasher ledFlasher(LED_BUILTIN);
 
@@ -63,7 +64,7 @@ void printGPS(){
     Serial.println (latitude );
     Serial.println (" " );
     }
-    
+
         /*  WiFi            */
 
 void initWiFi(){                        // Connect to WPA/WPA2 network
